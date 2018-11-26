@@ -1,0 +1,268 @@
+#include <MultiShiftRegister.h>
+
+int sol0;
+int sol1;
+int sol2;
+int sol3;
+int value0;
+int value1;
+int value2;
+int value3;
+int latchPin = 8;
+int clockPin = 12;
+int dataPin = 11;
+
+MultiShiftRegister msr (3, latchPin, clockPin, dataPin);
+
+bool led[20];
+
+void setup() {
+  pinMode(latchPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);
+  msr.shift();  
+  Serial.begin(9600);
+}
+
+int pressedbutton() {
+ int pressed = -1;
+ 
+ value0 = analogRead(A0);
+ value1 = analogRead(A1);
+ value2 = analogRead(A2);
+ value3 = analogRead(A3);
+ 
+
+
+ if(value0 < 150) {
+  sol0 = value0;
+ }
+ value0 = value0 - (sol0/7);
+ 
+
+ if(value1 < 150) {
+  sol1 = value1;
+ }
+ value1 = value1 - (sol1/7);
+ 
+
+ if(value2 < 150) {
+  sol2 = value2;
+ }
+ value2 = value2 - (sol2/7);
+ 
+
+ if(value3 < 150) {
+  sol3 = value3;
+ }
+ value3 = value3 - (sol3/7);
+ 
+ 
+ 
+ 
+  if(value0 < 1007 && value0 > 987 ) {
+  pressed = 0;
+ } else if (value0 < 983 && value0 > 890  ){
+  pressed = 1;
+ } else if (value0 < 885  && value0 > 875   ) {
+  pressed = 2;
+ } else if (value0 < 870  && value0 > 855 ) {
+  pressed = 3;
+ } else if (value0 < 845  && value0 > 800  ) {
+  pressed = 4;
+ }
+
+
+ if(value1 < 1007 && value1 > 1000 ) {
+  pressed = 5;
+ } else if (value1 < 996 && value1 > 980 ){
+  pressed = 6;
+ } else if (value1 < 976  && value1 > 965   ) {
+  pressed = 7;
+ } else if (value1 < 960  && value1 > 945 ) {
+  pressed = 8;
+ } else if (value1 < 940  && value1 > 900  ) {
+  pressed = 9;
+ }
+
+ 
+ if(value2 < 1000 && value2 > 987 ) {
+  pressed = 10;
+ } else if (value2 < 983 && value2 > 966 ){
+  pressed = 11;
+ } else if (value2 < 962  && value2 > 947   ) {
+  pressed = 12;
+ } else if (value2 < 942  && value2 > 930 ) {
+  pressed = 13;
+ } else if (value2 < 923  && value2 > 900  ) {
+  pressed = 14;
+ }
+
+
+  if(value3 < 1015 && value3 > 1000 ) {
+  pressed = 15;
+ } else if (value3 < 994 && value3 > 980 ){
+  pressed = 16;
+ } else if (value3 < 975  && value3 > 961   ) {
+  pressed = 17;
+ } else if (value3 < 956  && value3 > 945 ) {
+  pressed = 18;
+ } else if (value3 < 937  && value3 > 900  ) {
+  pressed = 19;
+ }
+
+ 
+
+ 
+ 
+ return pressed;
+}
+
+
+void switchState(int pressed) {
+  if(led[pressed] == false)
+  {
+    msr.set_shift(pressed);
+    led[pressed] = true;
+    delay(150);
+    } else {
+    msr.clear_shift(pressed);
+    led[pressed] = false;
+    delay(150);
+  }
+
+  
+  
+}
+
+
+void loop() {
+  int pressed = pressedbutton();
+  if (pressed == 0){
+      switchState(0);
+      switchState(1);
+      switchState(5);
+   }
+  if (pressed == 1){
+      switchState(1);
+      switchState(0);
+      switchState(2);
+      switchState(6);
+   }
+   if (pressed == 2){
+      switchState(2);
+      switchState(1);
+      switchState(3);
+      switchState(7);
+   }
+
+    if (pressed == 3){
+      switchState(3);
+      switchState(2);
+      switchState(4);
+      switchState(8);
+   }
+    if (pressed == 4){
+      switchState(4);
+      switchState(3);
+      switchState(9);
+   }
+    if (pressed == 5){
+      switchState(5);
+      switchState(0);
+      switchState(6);
+      switchState(10);
+   }
+    if (pressed == 6){
+      switchState(6);
+      switchState(1);
+      switchState(5);
+      switchState(7);
+      switchState(11);
+   }
+    if (pressed == 7){
+      switchState(7);
+      switchState(2);
+      switchState(6);
+      switchState(8);
+      switchState(12);
+   }
+    if (pressed == 8){
+      switchState(8);
+      switchState(3);
+      switchState(7);
+      switchState(9);
+      switchState(13);
+   }
+    if (pressed == 9){
+      switchState(9);
+      switchState(4);
+      switchState(8);
+      switchState(14);
+   }
+    if (pressed == 10){
+      switchState(10);
+      switchState(5);
+      switchState(11);
+      switchState(15);
+   }
+    if (pressed == 11){
+      switchState(11);
+      switchState(6);
+      switchState(10);
+      switchState(12);
+      switchState(16);
+   }
+    if (pressed == 12){
+      switchState(12);
+      switchState(7);
+      switchState(11);
+      switchState(13);
+      switchState(17);
+   }
+    if (pressed == 13){
+      switchState(13);
+      switchState(8);
+      switchState(12);
+      switchState(14);
+      switchState(18);
+   }
+    if (pressed == 14){
+      switchState(14);
+      switchState(9);
+      switchState(13);
+      switchState(19);
+   }
+    if (pressed == 15){
+      switchState(15);
+      switchState(10);
+      switchState(16);
+   }
+    if (pressed == 16){
+      switchState(16);
+      switchState(11);
+      switchState(15);
+      switchState(17);
+   }
+    if (pressed == 17){
+      switchState(17);
+      switchState(12);
+      switchState(16);
+      switchState(18);
+   }
+    if (pressed == 18){
+      switchState(18);
+      switchState(13);
+      switchState(17);
+      switchState(19);
+   }
+    if (pressed == 19){
+      switchState(19);
+      switchState(14);
+      switchState(18);
+   }
+  
+
+}
+
+
